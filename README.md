@@ -1,0 +1,3 @@
+# road_intersection
+
+This project centers on the development of a dynamic traffic intersection simulation. The core objective is to create a functional model of a two-way road crossing, complete with independently controlled traffic lights and autonomous vehicles. The simulation will allow for user-initiated vehicle spawning from various entry points, each vehicle adhering to predefined rules of movement, route selection, and safety protocols. Ultimately, the success of this project will be evaluated on its ability to visually represent traffic flow, effectively manage congestion through a custom traffic light control system, and prevent collisions between simulated vehicles, all within a user-interactive environment built using Rust.
