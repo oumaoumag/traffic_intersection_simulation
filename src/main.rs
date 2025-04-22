@@ -2,7 +2,6 @@ use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
 use std::time::Duration;
-use std::time::Instant;
 
 use rand::Rng;
 use road_intersection::constants::{WINDOW_HEIGHT, WINDOW_WIDTH};
