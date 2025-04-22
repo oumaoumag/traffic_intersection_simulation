@@ -1,0 +1,44 @@
+# Rust specific
+/target/
+debug/
+**/*.rs.bk
+Cargo.lock
+*.pdb
+
+# IDE specific
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Project specific
+# Build artifacts
+build/
+
+# Asset working files (if you'll be using graphic design tools)
+*.psd
+*.ai
+*.xcf
+
+# Temporary files
+*.tmp
+*.temp
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+.env.local
+
+# Dependencies
+vendor/
+
+# If you plan to have a dist or release folder
+dist/
+release/
