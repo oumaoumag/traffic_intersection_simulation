@@ -4,7 +4,7 @@ use sdl2::render::Canvas;
 use sdl2::video::Window;
 
 use crate::constants::{
-    LANE_WIDTH, VEHICLE_HEIGHT, VEHICLE_SAFE_DISTANCE, VEHICLE_SPEED, VEHICLE_WIDTH, WINDOW_HEIGHT,
+    LANE_WIDTH, ROAD_WIDTH, VEHICLE_HEIGHT, VEHICLE_SAFE_DISTANCE, VEHICLE_SPEED, VEHICLE_WIDTH, WINDOW_HEIGHT,
     WINDOW_WIDTH,
 };
 use crate::models::direction::Direction;
@@ -213,7 +213,7 @@ impl Vehicle {
                 continue;
             }
 
-            // Only check vehicles in the same direction and lane
+            // Check vehicles in the same direction and lane
             if self.direction == other.direction {
                 match self.direction {
                     Direction::North => {
@@ -250,6 +250,17 @@ impl Vehicle {
                     }
                 }
             }
+            // Check for vehicles in the intersection
+            else if self.is_approaching_intersection() && other.is_in_intersection() {
+                // Calculate distance to the other vehicle
+                let distance = ((self.position.0 - other.position.0).powi(2) +
+                               (self.position.1 - other.position.1).powi(2)).sqrt();
+
+                // If vehicles are too close, stop
+                if distance < VEHICLE_WIDTH as f32 * 1.5 {
+                    return true;
+                }
+            }
         }
 
         false
@@ -278,5 +289,47 @@ impl Vehicle {
             || self.position.0 > WINDOW_WIDTH as f32 + 50.0
             || self.position.1 < -50.0
             || self.position.1 > WINDOW_HEIGHT as f32 + 50.0
+    }
+
+    // Check if vehicle is in the intersection
+    pub fn is_in_intersection(&self) -> bool {
+        let intersection_center_x = WINDOW_WIDTH as f32 / 2.0;
+        let intersection_center_y = WINDOW_HEIGHT as f32 / 2.0;
+        let intersection_size = ROAD_WIDTH as f32;
+
+        self.position.0 > intersection_center_x - intersection_size / 2.0 &&
+        self.position.0 < intersection_center_x + intersection_size / 2.0 &&
+        self.position.1 > intersection_center_y - intersection_size / 2.0 &&
+        self.position.1 < intersection_center_y + intersection_size / 2.0
+    }
+
+    // Check if vehicle is approaching the intersection
+    pub fn is_approaching_intersection(&self) -> bool {
+        if self.has_passed_intersection {
+            return false;
+        }
+
+        let intersection_center_x = WINDOW_WIDTH as f32 / 2.0;
+        let intersection_center_y = WINDOW_HEIGHT as f32 / 2.0;
+        let approach_distance = VEHICLE_SAFE_DISTANCE * 1.5;
+
+        match self.direction {
+            Direction::North => {
+                let distance = self.position.1 - intersection_center_y;
+                distance > 0.0 && distance < approach_distance
+            }
+            Direction::South => {
+                let distance = intersection_center_y - self.position.1;
+                distance > 0.0 && distance < approach_distance
+            }
+            Direction::East => {
+                let distance = intersection_center_x - self.position.0;
+                distance > 0.0 && distance < approach_distance
+            }
+            Direction::West => {
+                let distance = self.position.0 - intersection_center_x;
+                distance > 0.0 && distance < approach_distance
+            }
+        }
     }
 }
