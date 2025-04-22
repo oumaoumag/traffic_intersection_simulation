@@ -6,14 +6,12 @@ use sdl2::video::Window;
 use crate::constants::TRAFFIC_LIGHT_SIZE;
 use crate::models::direction::Direction;
 
-// Traffic light state
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum TrafficLightState {
     Red,
     Green,
 }
 
-// Traffic light struct
 pub struct TrafficLight {
     pub position: Point,
     pub state: TrafficLightState,
