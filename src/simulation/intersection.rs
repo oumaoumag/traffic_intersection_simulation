@@ -6,7 +6,7 @@ use sdl2::video::Window;
 use std::time::Instant;
 
 use crate::constants::{
-    LANE_WIDTH, ROAD_WIDTH, TRAFFIC_LIGHT_CYCLE_TIME, TRAFFIC_LIGHT_SIZE, VEHICLE_SAFE_DISTANCE, WINDOW_HEIGHT, WINDOW_WIDTH
+    ROAD_WIDTH, TRAFFIC_LIGHT_CYCLE_TIME, TRAFFIC_LIGHT_SIZE, VEHICLE_SAFE_DISTANCE, WINDOW_HEIGHT, WINDOW_WIDTH
 };
 use crate::models::direction::Direction;
 use crate::models::route::Route;
@@ -66,7 +66,15 @@ impl Intersection {
         intersection.update_traffic_lights();
         intersection
     }
+}
 
+impl Default for Intersection {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl Intersection {
     pub fn update(&mut self) {
         // Update traffic lights
         if self.last_traffic_light_change.elapsed().as_millis() > TRAFFIC_LIGHT_CYCLE_TIME as u128 {
