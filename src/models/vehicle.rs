@@ -110,15 +110,43 @@ impl Vehicle {
     }
 
     fn change_direction_based_on_route(&mut self) {
+        let intersection_center_x = WINDOW_WIDTH as f32 / 2.0;
+        let intersection_center_y = WINDOW_HEIGHT as f32 / 2.0;
+        let lane_offset = LANE_WIDTH as f32 / 2.0;
+
         match (self.direction, self.route) {
-            (Direction::North, Route::Left) => self.direction = Direction::West,
-            (Direction::North, Route::Right) => self.direction = Direction::East,
-            (Direction::South, Route::Left) => self.direction = Direction::East,
-            (Direction::South, Route::Right) => self.direction = Direction::West,
-            (Direction::East, Route::Left) => self.direction = Direction::North,
-            (Direction::East, Route::Right) => self.direction = Direction::South,
-            (Direction::West, Route::Left) => self.direction = Direction::South,
-            (Direction::West, Route::Right) => self.direction = Direction::North,
+            (Direction::North, Route::Left) => {
+                self.direction = Direction::West;
+                self.position.1 = intersection_center_y - lane_offset;
+            }
+            (Direction::North, Route::Right) => {
+                self.direction = Direction::East;
+                self.position.1 = intersection_center_y + lane_offset;
+            }
+            (Direction::South, Route::Left) => {
+                self.direction = Direction::East;
+                self.position.1 = intersection_center_y + lane_offset;
+            }
+            (Direction::South, Route::Right) => {
+                self.direction = Direction::West;
+                self.position.1 = intersection_center_y - lane_offset;
+            }
+            (Direction::East, Route::Left) => {
+                self.direction = Direction::North;
+                self.position.0 = intersection_center_x - lane_offset;
+            }
+            (Direction::East, Route::Right) => {
+                self.direction = Direction::South;
+                self.position.0 = intersection_center_x + lane_offset;
+            }
+            (Direction::West, Route::Left) => {
+                self.direction = Direction::South;
+                self.position.0 = intersection_center_x + lane_offset;
+            }
+            (Direction::West, Route::Right) => {
+                self.direction = Direction::North;
+                self.position.0 = intersection_center_x - lane_offset;
+            }
             _ => {}, // Straight, no change
         }
     }
